@@ -1,7 +1,7 @@
 ## Starting the Web App Locally
 ` $ yarn start `
 
-## Building the application - Extra words
+## Building the application - Extra words added
 ` $ yarn build `
 
 ## Building the container
