@@ -18,6 +18,11 @@ public class SentimentDto {
         return sentence;
     }
 
+    public String readSentence() {
+
+        return sentence;
+    }
+
     public void setSentence(String sentence) {
         this.sentence = sentence;
     }
