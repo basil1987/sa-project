@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build Sa-Frontend') {
+            steps {
+                sh 'cd sa-frontend && npm install && npm run build'
+            }
+        }
+        stage('Build Sa-Webapp') {
+            steps {
+                sh 'cd sa-webapp && mvn install'
+            }
+        }
+        stage('Docker image') {
+            steps {
+                sh 'cd sa-frontend && docker build -t sa-frontend:1.0.0 .'
+            }
+        }
+        stage('Docker image webapp') {
+            steps {
+                sh 'cd sa-webapp && docker build -t sa-webapp:1.0.0 .'
+            }
+        }
+        stage('Docker image logic') {
+            steps {
+                sh 'cd sa-logic && docker build -t sa-logic:1.0.0 .'
+            }
+        }
+        stage('Archieve') {
+            steps {
+                archiveArtifacts artifacts: '**/*.jar', followSymlinks: false
+            }
+        }
+        stage('Fingerprint all jar files') {
+            steps {
+                fingerprint '**/*.jar'
+            }
+        }
+
+        stage('Email Notification') {
+	    steps {
+		emailext body: 'Build Failed. Please check the Dashboard of Jenkins', subject: 'Build Failed. Please check the Dashboard of Jenkins', to: 'basil1987@gmail.com'
+            }
+	}
+    }
+}
